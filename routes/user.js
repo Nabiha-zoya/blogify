@@ -29,15 +29,21 @@ router.get('/logout', (req, res) => {
 })
 
 router.post('/signup', async (req, res) => {
-    const {fullName, email, password} = req.body;
+    const { fullName, email, password } = req.body;
 
-    await User.create({
-        fullName,
-        email,
-        password,
-    });
-
-    return res.redirect("/")
+    try {
+        await User.create({
+            fullName,
+            email,
+            password,
+        });
+        return res.redirect("/user/signin");
+    } catch (error) {
+        console.error("Signup Error:", error);
+        return res.render("signup", {
+            error: error.message || "Failed to create account.",
+        });
+    }
 });
 
 module.exports = router;

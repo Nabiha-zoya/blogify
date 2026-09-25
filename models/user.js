@@ -2,7 +2,7 @@ const { createHmac, randomBytes } = require("crypto");
 
 const { Schema, model } = require("mongoose");
 const { createTokenForUser } = require("../services/authentication");
-const { nextTick } = require("process");
+const { next } = require("process");
 
 const userSchema = new Schema(
     {
@@ -40,7 +40,7 @@ const userSchema = new Schema(
     { timestamps: true }
 );
 
-userSchema.pre("save", async function () {
+userSchema.pre("save", async function (next) {
     const user = this;
 
     if (!user.isModified("password")) return;

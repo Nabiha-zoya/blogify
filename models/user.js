@@ -2,6 +2,7 @@ const { createHmac, randomBytes } = require("crypto");
 
 const { Schema, model } = require("mongoose");
 const { createTokenForUser } = require("../services/authentication");
+const { nextTick } = require("process");
 
 const userSchema = new Schema(
     {
@@ -53,6 +54,7 @@ userSchema.pre("save", async function () {
     this.salt = salt;
     this.password = hashedPassword;
 
+    next();
 });
 
 userSchema.static('matchPasswordAndGenerateToken', async function(email, password){

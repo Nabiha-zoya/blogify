@@ -29,8 +29,12 @@ app.set('views', path.resolve('./views'));
 
 app.use(express.urlencoded({ extended: false}));
 
-app.get('/', (req, res) => {
-  res.render('home');
+app.get('/', async (req, res) => {
+  const allBlogs = await Blog.find({});
+  res.render('home', {
+    user: req.user,
+    blogs: allBlogs,
+  });
 });
 
 app.use("/user", userRoute);
